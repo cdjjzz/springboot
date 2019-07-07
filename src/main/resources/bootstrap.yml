@@ -1,0 +1,32 @@
+#将公共部分提取出来，比如端口号、实例名等配置
+spring:
+  application:
+    name: application-eurekaserver
+---
+spring:
+  profiles: peer1
+server:
+  port: 18080
+eureka:
+  instance:
+    hostname: springboot
+    instance-id: ${spring.application.name}:${server.port}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://springboot1:28080/eureka,http://springboot:18080/eureka
+---
+spring:
+  profiles: peer2
+server:
+  port: 28080
+eureka:
+  instance:
+    hostname: springboot1
+    instance-id: ${spring.application.name}:${server.port}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://springboot:18080/eureka,http://springboot1:28080/eureka
